@@ -1,0 +1,67 @@
+﻿@using CustomPartModule.Models
+@*@using OrchardCore.Mvc.Utilities*@
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model SurveyModel
+
+<div>
+    @if(Model != null)
+    {
+        <h3>@Model.SurveyTitle</h3>
+        @if (!string.IsNullOrEmpty(Model.UserId))
+        {
+            <div>
+                Model.UserId
+            </div>
+        }
+        else
+        {
+            <p>Summary Results</p>
+        }
+        @foreach (var question in Model.Questions)
+        {
+            <h4>@question.QuestionTitle</h4>
+            <h4>(@question.QuestionCount) Answers</h4>
+            switch (question.QuestionType)
+            {
+                case "MultipleChoiceQuestion":
+                {
+                    string type = "radio";
+                    if (question.AllowMultipleAnswers)
+                    {
+                        type = "checkbox";
+                    }
+                    foreach (var answer in question.Answers)
+                    {
+                        <input type="@type" disabled/> <p>@answer.AnswerTitle : @answer.AnswerCount (@answer.AnswerPercentage%) </p>
+                    }
+                    break;
+                }
+                case "BooleanQuestion":
+                {
+                    foreach (var answer in question.Answers)
+                    {
+                        <input type="radio" disabled/> <p>@answer.AnswerTitle : @answer.AnswerCount (@answer.AnswerPercentage%) </p>
+                    }
+                    break;
+                }
+                default:
+                {
+                    foreach (var answer in question.Answers)
+                    {
+                        <p>@answer.AnswerTitle</p>
+                    }
+                    break;
+                }
+            }
+            <hr />
+        }
+    }
+    else{
+        <h3>No Answers</h3>
+    }
+</div>
+

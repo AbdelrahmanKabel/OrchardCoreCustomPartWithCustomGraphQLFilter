@@ -1,0 +1,58 @@
+﻿@using CustomPartModule.Models
+@model SurveyModel
+
+<div>
+    <h2>Surveys</h2>
+    <form asp-controller="SurveyResults" asp-action="Index" >
+
+        <div class="row"> 
+            <div class="col-md-4">   
+                <label>Select Survey :</label>
+                <select id="drpSurveyList2" class="form-control" asp-for="SurveyId" asp-items="@ViewBag.SurveysList" style="border:3px solid">  
+                    @*<option value="">--Select--</option>  *@
+                </select>
+                @*<span asp-validation-for="SurveyId" class="text-danger"></span>*@
+                <input type="hidden" asp-for="SurveyId"/>  
+                 
+            </div>  
+            
+            <div class="col-md-4">   
+                <label>Select User :</label>
+                <select id="drpSurveyList" class="form-control" asp-for="UserId" asp-items="@(List<SelectListItem>)ViewBag.UsersAnswerdList"  style="border:3px solid">  
+                    <option value="">--All--</option>  
+                </select>  
+                @*<input type="hidden" asp-for="SurveyId"/>  *@
+                 
+            </div>  
+            <div class="col-md-2"> 
+                <br />
+                <input type="submit" name="btnSubmit" value="Submit" class="btn btn-success" />  
+            </div>
+        </div>  
+    </form>
+</div>
+       
+
+<input type="button" name="btnSubmit" value="Load Partial" onclick="testPartial()" class="btn btn-success" />  
+<div id="test">
+
+</div>
+<div>
+    @if(Model != null)
+    {
+        if (!string.IsNullOrEmpty(Model.UserId))
+        {
+            <partial name="_SurveyUserResults" model=Model></partial>
+        }
+        else
+        {
+            <partial name="_SurveyResults" model=Model></partial>
+        }
+    }
+</div>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script>
+    function testPartial(){
+        $('#test').load("/CustomPartModule/SurveyResults/Index")
+    }
+</script>
